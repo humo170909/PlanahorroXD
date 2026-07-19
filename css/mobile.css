@@ -1,0 +1,68 @@
+/* ============================================================
+   FinanzasPro — Ajustes responsive finos
+   Mobile-first: los estilos base ya son fluidos (clamp, %, dvh).
+   Aquí solo van excepciones puntuales por breakpoint.
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: var(--space-5) var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .theme-toggle {
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+}
+
+@media (max-width: 360px) {
+  .auth-title {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* ------------------------------------------------------------
+   Shell de la app (sidebar + topbar) — off-canvas en móvil/tablet
+   ------------------------------------------------------------ */
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .app-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 260px;
+    transform: translateX(-100%);
+    transition: transform var(--duration-normal) var(--ease);
+    z-index: 20;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .app-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-content {
+    padding: var(--space-4);
+  }
+
+  .app-topbar {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .topbar-user-name {
+    display: none;
+  }
+}

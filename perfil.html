@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil — FinanzasPro</title>
+  <meta name="description" content="Datos de tu cuenta: nombre, correo y contraseña.">
+  <link rel="preconnect" href="https://esm.sh" crossorigin>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside id="app-sidebar" class="app-sidebar" aria-label="Menú principal"></aside>
+
+    <div class="app-main">
+      <header id="app-topbar" class="app-topbar"></header>
+
+      <main class="app-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Perfil</h1>
+            <p class="page-subtitle">Tus datos de cuenta.</p>
+          </div>
+        </div>
+
+        <section class="card panel" style="max-width: 480px; margin-bottom: var(--space-6);">
+          <h2 class="panel-title">Datos personales</h2>
+
+          <div class="goal-card-meta" style="margin-bottom: var(--space-4);">
+            <span>Correo: <strong id="profile-email" style="color: var(--color-text);"></strong></span>
+          </div>
+          <div class="goal-card-meta" style="margin-bottom: var(--space-4);">
+            <span>Miembro desde: <strong id="profile-member-since" style="color: var(--color-text);"></strong></span>
+          </div>
+
+          <div id="profile-status" class="alert" role="status" hidden></div>
+
+          <form id="profile-form" class="auth-form" novalidate>
+            <div class="form-group">
+              <label for="profile-full-name">Nombre completo</label>
+              <input class="input" type="text" id="profile-full-name" name="fullName" maxlength="120" required>
+              <span class="input-error-msg" data-error-for="fullName"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </form>
+        </section>
+
+        <section class="card panel" style="max-width: 480px;">
+          <h2 class="panel-title">Cambiar contraseña</h2>
+
+          <div id="password-status" class="alert" role="status" hidden></div>
+
+          <form id="password-form" class="auth-form" novalidate>
+            <div class="form-group">
+              <label for="new-password">Nueva contraseña</label>
+              <input class="input" type="password" id="new-password" name="newPassword" autocomplete="new-password" required>
+              <span class="input-error-msg" data-error-for="newPassword"></span>
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirmar contraseña</label>
+              <input class="input" type="password" id="confirm-password" name="confirmPassword" autocomplete="new-password" required>
+              <span class="input-error-msg" data-error-for="confirmPassword"></span>
+            </div>
+            <button type="submit" class="btn btn-secondary">Actualizar contraseña</button>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/perfil.js"></script>
+</body>
+</html>
