@@ -1,0 +1,341 @@
+/* ============================================================
+   FinanzasPro — Reset + estilos base
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Cualquier regla de autor que fije `display` (ej. .app-shell {display:
+   grid}) gana por origen de cascada sobre el `[hidden]{display:none}`
+   del navegador, aunque la especificidad sea igual — así que sin esta
+   regla, un elemento con `hidden` y un display propio NUNCA se
+   ocultaría de verdad. Es el caso clásico de .app-shell/.auth-body
+   (el router los oculta con el atributo hidden) y de cada <form>
+   auxiliar en login (.auth-form ya trae display:flex). */
+[hidden] {
+  display: none !important;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+
+  /* Mesh gradient: tres manchas radiales suaves sobre el color base.
+     Es CSS puro (sin canvas/partículas/JS) y background-attachment:
+     fixed evita que se repinte al hacer scroll — coste de rendimiento
+     prácticamente nulo frente a un fondo plano. color-mix() deriva la
+     opacidad directamente de los tokens de marca, sin duplicar hex. */
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(circle at 12% 18%, color-mix(in srgb, var(--mesh-color-1) var(--mesh-opacity), transparent) 0%, transparent 55%),
+    radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--mesh-color-2) var(--mesh-opacity), transparent) 0%, transparent 50%),
+    radial-gradient(circle at 50% 95%, color-mix(in srgb, var(--mesh-color-3) var(--mesh-opacity), transparent) 0%, transparent 55%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transition: background-color var(--duration-normal) var(--ease), color var(--duration-normal) var(--ease);
+}
+
+h1, h2, h3, h4, p, figure {
+  margin: 0;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+}
+
+/* Scrollbar sutil (Chrome/Edge/Safari) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+@media print {
+  .app-sidebar, .app-topbar, .theme-toggle, .filters-bar,
+  .export-toolbar, .page-header .btn, dialog.modal {
+    display: none !important;
+  }
+  .app-shell { display: block; }
+  .app-content { padding: 0; }
+  body { background: #ffffff; color: #000000; }
+  .card, .card-glass { box-shadow: none; border: 1px solid #ddd; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   Utilidades de superficie / glassmorphism
+   ------------------------------------------------------------ */
+
+.card {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-glass {
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+
+.link-muted {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* ------------------------------------------------------------
+   Layout de páginas de autenticación (login / register)
+   ------------------------------------------------------------ */
+
+.auth-body {
+  display: flex;
+  min-height: 100dvh;
+  align-items: stretch;
+}
+
+/* Panel izquierdo (Fase 3): decorativo, siempre oscuro a propósito
+   (independiente del tema claro/oscuro de la app) — es un panel de
+   marca, no una vista de datos del usuario, igual que el login de
+   Linear/Vercel. Solo visible desde tablet en adelante (ver
+   mobile.css): en pantallas angostas no hay espacio para dos
+   columnas y el formulario es lo único que importa. */
+.auth-illustration {
+  display: none;
+  position: relative;
+  flex: 1 1 50%;
+  overflow: hidden;
+  padding: var(--space-8);
+  color: #f4f4f6;
+  background: linear-gradient(160deg, #0b0b1a 0%, #17172e 50%, #201a3d 100%);
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-illustration-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.auth-illustration-glow-1 {
+  width: 320px;
+  height: 320px;
+  top: -80px;
+  left: -80px;
+  background: var(--color-accent);
+}
+
+.auth-illustration-glow-2 {
+  width: 280px;
+  height: 280px;
+  bottom: -60px;
+  right: -60px;
+  background: var(--color-teal);
+}
+
+.auth-illustration-content {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+}
+
+.auth-illustration-badge {
+  margin-bottom: var(--space-6);
+}
+
+.auth-illustration-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.auth-illustration-subtitle {
+  margin-top: var(--space-4);
+  color: rgba(244, 244, 246, 0.72);
+  font-size: var(--font-size-md);
+  line-height: 1.6;
+}
+
+/* Tarjeta flotante de "producto" — un mock del dashboard real, no una
+   foto: refuerza qué hace la app sin depender de ningún asset de imagen. */
+.auth-mock-card {
+  margin-top: var(--space-7);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.5);
+  animation: fadeSlideUp 600ms var(--ease) 150ms backwards;
+}
+
+.auth-mock-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-xs);
+  color: rgba(244, 244, 246, 0.6);
+}
+
+.auth-mock-trend {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.auth-mock-card-value {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.auth-mock-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  height: 64px;
+  margin-top: var(--space-5);
+}
+
+.auth-mock-bars span {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, var(--color-accent), transparent);
+  animation: scaleIn 500ms var(--ease) backwards;
+  transform-origin: bottom;
+}
+
+.auth-form-panel {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-7) var(--space-6);
+  animation: fadeSlideUp var(--duration-normal) var(--ease);
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.auth-brand-name {
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+}
+
+.auth-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.auth-subtitle {
+  margin-top: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.auth-form {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.auth-form-row {
+  display: flex;
+  justify-content: flex-end;
+  font-size: var(--font-size-sm);
+}
+
+.auth-footer {
+  margin-top: var(--space-6);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.theme-toggle {
+  position: fixed;
+  top: var(--space-5);
+  right: var(--space-5);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  font-size: var(--font-size-md);
+  z-index: 10;
+}

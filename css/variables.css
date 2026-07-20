@@ -1,0 +1,153 @@
+/* ============================================================
+   FinanzasPro — Design Tokens
+   Toda la app consume estas variables. Cambiar el tema/paleta
+   se hace aquí, nunca hardcodeando colores en otros archivos.
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* Marca / acento */
+  --color-accent: #6366f1;
+  --color-accent-hover: #4f46e5;
+  --color-accent-soft: rgba(99, 102, 241, 0.12);
+
+  /* Estado */
+  --color-success: #22c55e;
+  --color-success-soft: rgba(34, 197, 94, 0.12);
+  --color-danger: #ef4444;
+  --color-danger-soft: rgba(239, 68, 68, 0.12);
+  --color-warning: #f59e0b;
+  --color-warning-soft: rgba(245, 158, 11, 0.12);
+
+  /* Paleta ampliada — identidad propia por tarjeta/KPI (dashboard).
+     Regla de diseño: el rojo queda reservado para Gastos (--color-danger);
+     el resto de tarjetas usa uno de estos tonos, nunca rojo, para que
+     "rojo" siga leyéndose como "atención/gasto" en toda la app. */
+  --color-teal: #14b8a6;
+  --color-teal-soft: rgba(20, 184, 166, 0.12);
+  --color-blue: #3b82f6;
+  --color-blue-soft: rgba(59, 130, 246, 0.12);
+  --color-purple: #a855f7;
+  --color-purple-soft: rgba(168, 85, 247, 0.12);
+  --color-orange: #f97316;
+  --color-orange-soft: rgba(249, 115, 22, 0.12);
+
+  /* Superficies */
+  --color-bg: #f5f5f7;
+  --color-bg-elevated: #ffffff;
+  --color-surface-glass: rgba(255, 255, 255, 0.72);
+  --color-border: rgba(15, 15, 20, 0.08);
+
+  /* Texto */
+  --color-text: #111114;
+  --color-text-secondary: #63636d;
+  --color-text-muted: #9a9aa5;
+
+  /* Tipografía — Plus Jakarta Sans (cargada en index.html vía Google
+     Fonts) como voz principal; system-ui como respaldo instantáneo
+     mientras la fuente termina de cargar o si la carga falla. */
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 2.5rem;
+
+  /* Espaciado */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 48px;
+
+  /* Bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+
+  /* Sombras — más difusas y en capas para una sensación "premium"
+     (una sombra de contacto ajustada + una de elevación amplia) */
+  --shadow-sm: 0 1px 2px rgba(15, 15, 20, 0.04), 0 1px 1px rgba(15, 15, 20, 0.03);
+  --shadow-md: 0 2px 4px rgba(15, 15, 20, 0.04), 0 12px 32px -8px rgba(15, 15, 20, 0.12);
+  --shadow-lg: 0 4px 8px rgba(15, 15, 20, 0.05), 0 32px 64px -16px rgba(15, 15, 20, 0.18);
+
+  /* Glow: sombra de color usada en hover de tarjetas/botones — se
+     combina con color-mix() contra el acento que corresponda en cada
+     componente (ej. .stat-card:hover usa el color de su propio ícono),
+     así que aquí solo se fija la forma (offset/blur/spread), no el color. */
+  --glow-shadow: 0 12px 32px -8px;
+
+  /* Movimiento */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+
+  /* Fondo mesh gradient — tonos de marca a muy baja opacidad, usados
+     por .app-background en main.css. Un solo lugar para ajustar la
+     paleta del fondo en toda la app. */
+  --mesh-color-1: #6366f1; /* indigo */
+  --mesh-color-2: #8b5cf6; /* violeta */
+  --mesh-color-3: #06b6d4; /* cian */
+  --mesh-opacity: 14%;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-accent: #818cf8;
+  --color-accent-hover: #a5b4fc;
+  --color-accent-soft: rgba(129, 140, 248, 0.16);
+
+  --color-bg: #0b0b0d;
+  --color-bg-elevated: #17171b;
+  --color-surface-glass: rgba(24, 24, 28, 0.65);
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  --color-text: #f4f4f6;
+  --color-text-secondary: #a3a3ad;
+  --color-text-muted: #6b6b76;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.25), 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.3), 0 32px 64px -16px rgba(0, 0, 0, 0.6);
+
+  --mesh-color-1: #818cf8;
+  --mesh-color-2: #a78bfa;
+  --mesh-color-3: #22d3ee;
+  --mesh-opacity: 20%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --color-accent: #818cf8;
+    --color-accent-hover: #a5b4fc;
+    --color-accent-soft: rgba(129, 140, 248, 0.16);
+
+    --color-bg: #0b0b0d;
+    --color-bg-elevated: #17171b;
+    --color-surface-glass: rgba(24, 24, 28, 0.65);
+    --color-border: rgba(255, 255, 255, 0.08);
+
+    --color-text: #f4f4f6;
+    --color-text-secondary: #a3a3ad;
+    --color-text-muted: #6b6b76;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.25), 0 12px 32px -8px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.3), 0 32px 64px -16px rgba(0, 0, 0, 0.6);
+
+    --mesh-color-1: #818cf8;
+    --mesh-color-2: #a78bfa;
+    --mesh-color-3: #22d3ee;
+    --mesh-opacity: 20%;
+  }
+}

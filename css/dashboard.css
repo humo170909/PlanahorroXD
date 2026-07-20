@@ -1,0 +1,936 @@
+/* ============================================================
+   FinanzasPro — Layout de la aplicación (sidebar + topbar) y
+   componentes del dashboard (stat cards, paneles, gráficos).
+   ============================================================ */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100dvh;
+}
+
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-4);
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  animation: fadeIn var(--duration-normal) var(--ease);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  padding: 0 var(--space-2);
+  margin-bottom: var(--space-5);
+  letter-spacing: -0.01em;
+}
+
+/* Insignia degradada compartida por el logo del sidebar y el de las
+   pantallas de login/register — una sola marca visual consistente. */
+.brand-badge {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-accent), var(--mesh-color-2));
+  color: #ffffff;
+  box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  flex-shrink: 0;
+}
+
+.sidebar-divider {
+  height: 1px;
+  margin: var(--space-2) var(--space-2) var(--space-5);
+  background: linear-gradient(90deg, transparent, var(--color-border) 20%, var(--color-border) 80%, transparent);
+  border: none;
+}
+
+.sidebar-link-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.sidebar-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  transition: background-color var(--duration-fast) var(--ease),
+              color var(--duration-fast) var(--ease),
+              transform var(--duration-fast) var(--ease);
+}
+
+.sidebar-link::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  width: 3px;
+  height: 60%;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  transform: translateY(-50%) scaleY(0);
+  transition: transform var(--duration-normal) var(--ease);
+}
+
+.sidebar-link:hover {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  transform: translateX(2px);
+}
+
+.sidebar-link.active {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.sidebar-link.active::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: left;
+  transition: background-color var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease);
+}
+
+.sidebar-logout:hover {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* Interruptor de modo oscuro (Fase 2) — checkbox real por debajo
+   (accesible, funciona con teclado) estilizado como switch. */
+.theme-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+.theme-switch:hover {
+  background: var(--color-accent-soft);
+}
+
+.theme-switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.theme-switch-track {
+  flex-shrink: 0;
+  width: 36px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  position: relative;
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+.theme-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-normal) var(--ease);
+}
+
+.theme-switch input:checked ~ .theme-switch-track {
+  background: var(--color-accent);
+}
+
+.theme-switch input:checked ~ .theme-switch-track .theme-switch-thumb {
+  transform: translateX(16px);
+}
+
+.theme-switch input:focus-visible ~ .theme-switch-track {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.theme-switch-label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+/* Fila de usuario al pie del sidebar — reemplaza el ítem "Perfil" de
+   la navegación principal (Fase 2). */
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+.sidebar-user:hover,
+.sidebar-user.active {
+  background: var(--color-accent-soft);
+}
+
+.sidebar-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-accent), var(--mesh-color-2));
+  box-shadow: 0 4px 10px -3px color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.sidebar-user-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-user-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-user-role {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.sidebar-user-chevron {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 5;
+}
+
+.topbar-spacer {
+  flex: 1;
+}
+
+/* Buscador global (Fase 4) */
+.topbar-search {
+  position: relative;
+  flex: 1;
+  max-width: 360px;
+}
+
+.topbar-search-icon {
+  position: absolute;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  display: grid;
+  pointer-events: none;
+}
+
+.topbar-search-input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3) var(--space-2) calc(var(--space-3) * 2 + 16px);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+
+.topbar-search-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.topbar-search-results {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  right: 0;
+  max-height: 360px;
+  overflow-y: auto;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 20;
+  animation: scaleIn var(--duration-fast) var(--ease);
+}
+
+.topbar-search-result {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--duration-fast) var(--ease);
+}
+
+.topbar-search-result:last-child {
+  border-bottom: none;
+}
+
+.topbar-search-result:hover {
+  background: var(--color-accent-soft);
+}
+
+/* Notificaciones (Fase 4) */
+/* overflow no se recorta aquí (a diferencia de .btn/.icon-btn): el
+   badge de notificaciones (.topbar-badge) se posiciona a propósito
+   fuera del borde del círculo, y overflow:hidden lo cortaría. El
+   ripple (Fase 9) simplemente no queda clipeado al círculo — efecto
+   cosmético menor, preferible a romper el badge. */
+.topbar-icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background-color var(--duration-fast) var(--ease), color var(--duration-fast) var(--ease);
+}
+
+.topbar-icon-btn:hover {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.topbar-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: var(--radius-full);
+  background: var(--color-danger);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--color-bg-elevated);
+}
+
+.topbar-notifications {
+  position: relative;
+}
+
+.topbar-notif-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 20;
+  animation: scaleIn var(--duration-fast) var(--ease);
+}
+
+.topbar-notif-header {
+  padding: var(--space-3) var(--space-4);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.topbar-notif-item {
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.sidebar-mobile-toggle {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-elevated);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.app-content {
+  padding: var(--space-6);
+  flex: 1;
+}
+
+.page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.page-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-1);
+  text-transform: capitalize;
+}
+
+/* ------------------------------------------------------------
+   Stat cards (KPI row)
+   ------------------------------------------------------------ */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.stat-card {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  opacity: 0;
+  animation: fadeSlideUp var(--duration-normal) var(--ease) forwards;
+  transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
+}
+
+/* Entrada escalonada: cada tarjeta aparece un poco después que la
+   anterior en vez de todas a la vez — ver dashboardView.js, que fija
+   --stat-index en cada .stat-card al construirlas. */
+.stat-card { animation-delay: calc(var(--stat-index, 0) * 70ms); }
+
+/* Glow al hover: --stat-glow lo fija cada tarjeta inline (mismo
+   mecanismo que --stat-index) con el color de su propio ícono, así
+   una sola regla sirve para las 6 tarjetas sin repetir combinaciones. */
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--glow-shadow) color-mix(in srgb, var(--stat-glow, var(--color-accent)) 35%, transparent), var(--shadow-md);
+}
+
+.stat-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.stat-card-icon-accent { background: var(--color-accent-soft); color: var(--color-accent); }
+.stat-card-icon-success { background: var(--color-success-soft); color: var(--color-success); }
+.stat-card-icon-danger { background: var(--color-danger-soft); color: var(--color-danger); }
+.stat-card-icon-warning { background: var(--color-warning-soft); color: var(--color-warning); }
+.stat-card-icon-teal { background: var(--color-teal-soft); color: var(--color-teal); }
+.stat-card-icon-purple { background: var(--color-purple-soft); color: var(--color-purple); }
+.stat-card-icon-blue { background: var(--color-blue-soft); color: var(--color-blue); }
+.stat-card-icon-orange { background: var(--color-orange-soft); color: var(--color-orange); }
+
+.stat-card-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.stat-card-trend.positive { background: var(--color-success-soft); color: var(--color-success); }
+.stat-card-trend.negative { background: var(--color-danger-soft); color: var(--color-danger); }
+
+.stat-card-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.stat-card-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: proportional-nums;
+}
+
+.stat-card-delta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.stat-card-delta.positive { color: var(--color-success); }
+.stat-card-delta.negative { color: var(--color-danger); }
+
+.stat-card-spark {
+  height: 40px;
+  margin-top: auto;
+}
+
+/* Medidor (meter): usado en la tarjeta de "gasto disponible", donde
+   la métrica es una razón contra un límite, no una tendencia en el
+   tiempo — la pista es un tono más claro de la misma rampa (ver skill
+   dataviz, "Figures — Meter"). */
+.stat-card-meter {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.meter-track {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-soft);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  transition: width var(--duration-normal) var(--ease), background-color var(--duration-normal) var(--ease);
+}
+
+.meter-fill.warning { background: var(--color-warning); }
+.meter-fill.danger { background: var(--color-danger); }
+
+.meter-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------------
+   Paneles y gráficos
+   ------------------------------------------------------------ */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+  align-items: stretch;
+}
+
+.panel {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+
+.chart-container {
+  position: relative;
+  height: 280px;
+}
+
+.chart-container-donut {
+  height: 240px;
+}
+
+/* ------------------------------------------------------------
+   Lista de movimientos
+   ------------------------------------------------------------ */
+
+.movement-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.movement-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.movement-item:hover {
+  background: var(--color-accent-soft);
+}
+
+.movement-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: var(--font-size-md);
+  flex-shrink: 0;
+}
+
+/* Variantes de color reutilizadas en dashboard, presupuesto y perfil
+   (antes cada vista fijaba background/color por JS inline, repetido
+   en tres archivos distintos). */
+.movement-icon-success { background: var(--color-success-soft); color: var(--color-success); }
+.movement-icon-danger { background: var(--color-danger-soft); color: var(--color-danger); }
+.movement-icon-warning { background: var(--color-warning-soft); color: var(--color-warning); }
+
+.badge-danger { background: var(--color-danger-soft); color: var(--color-danger); }
+
+.movement-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.movement-title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.movement-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.movement-amount {
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
+  font-variant-numeric: proportional-nums;
+}
+
+.movement-amount.income { color: var(--color-success); }
+.movement-amount.expense { color: var(--color-danger); }
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* ------------------------------------------------------------
+   Tokens de color para gráficos (Chart.js los lee vía charts.js)
+   Paleta categórica validada para daltonismo — orden fijo, nunca
+   ciclada arbitrariamente. Ver skill "dataviz" / references/palette.md.
+   ------------------------------------------------------------ */
+
+.viz-root {
+  color-scheme: light;
+  --chart-surface: #fcfcfb;
+  --chart-text-primary: #0b0b0b;
+  --chart-text-secondary: #52514e;
+  --chart-text-muted: #898781;
+  --chart-grid: #e1e0d9;
+
+  --series-1: #2a78d6; /* azul */
+  --series-2: #008300; /* verde */
+  --series-3: #e87ba4; /* magenta */
+  --series-4: #eda100; /* amarillo */
+  --series-5: #1baf7a; /* aqua */
+  --series-6: #eb6834; /* naranja */
+  --series-7: #4a3aa7; /* violeta */
+  --series-8: #e34948; /* rojo */
+
+  /* Paleta de estado (bien/mal) — invariante entre modos, y siempre
+     distinta de los tonos categóricos de arriba. Solo para
+     codificar "por encima/debajo de la base", nunca identidad. */
+  --status-good: #0ca30c;
+  --status-critical: #d03b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --chart-surface: #1a1a19;
+    --chart-text-primary: #ffffff;
+    --chart-text-secondary: #c3c2b7;
+    --chart-text-muted: #898781;
+    --chart-grid: #2c2c2a;
+
+    --series-1: #3987e5;
+    --series-2: #008300;
+    --series-3: #d55181;
+    --series-4: #c98500;
+    --series-5: #199e70;
+    --series-6: #d95926;
+    --series-7: #9085e9;
+    --series-8: #e66767;
+  }
+}
+
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --chart-surface: #1a1a19;
+  --chart-text-primary: #ffffff;
+  --chart-text-secondary: #c3c2b7;
+  --chart-text-muted: #898781;
+  --chart-grid: #2c2c2a;
+
+  --series-1: #3987e5;
+  --series-2: #008300;
+  --series-3: #d55181;
+  --series-4: #c98500;
+  --series-5: #199e70;
+  --series-6: #d95926;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+}
+
+/* ------------------------------------------------------------
+   Mapa de calor de gastos (Reportes) — CSS/DOM puro, sin plugin.
+   ------------------------------------------------------------ */
+
+.heatmap {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 3px;
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--color-border);
+  flex-shrink: 0;
+}
+
+.heatmap-cell-lead {
+  background: transparent;
+}
+
+.heatmap-cell[data-level="1"] { background: color-mix(in srgb, var(--color-danger) 25%, var(--color-border)); }
+.heatmap-cell[data-level="2"] { background: color-mix(in srgb, var(--color-danger) 50%, var(--color-border)); }
+.heatmap-cell[data-level="3"] { background: color-mix(in srgb, var(--color-danger) 75%, var(--color-border)); }
+.heatmap-cell[data-level="4"] { background: var(--color-danger); }
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--space-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.heatmap-legend .heatmap-cell {
+  width: 10px;
+  height: 10px;
+}
+
+/* ------------------------------------------------------------
+   Calendario financiero (/calendario)
+   ------------------------------------------------------------ */
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.calendar-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.calendar-grid-card {
+  padding: var(--space-5);
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-1);
+  margin-bottom: var(--space-2);
+}
+
+.calendar-weekdays span {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-1);
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+
+.calendar-cell-empty {
+  cursor: default;
+}
+
+.calendar-cell:not(.calendar-cell-empty):hover {
+  background: var(--color-accent-soft);
+  transform: scale(1.04);
+}
+
+.calendar-cell-day {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.calendar-cell.is-today .calendar-cell-day {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.calendar-cell.selected {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.calendar-cell.selected .calendar-cell-day {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.calendar-cell-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.calendar-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-success);
+}
+
+.calendar-dot-expense {
+  background: var(--color-danger);
+}
+
+.calendar-legend {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.calendar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}

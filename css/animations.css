@@ -1,0 +1,104 @@
+/* ============================================================
+   FinanzasPro — Animaciones y transiciones compartidas
+   ============================================================ */
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes rippleExpand {
+  to { transform: scale(3); opacity: 0; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) var(--ease);
+}
+
+.animate-shake {
+  animation: shake 400ms var(--ease);
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-normal) var(--ease);
+}
+
+/* Skeleton loading: franja de brillo que recorre un bloque gris
+   mientras se espera una respuesta de Supabase — se usa en vez de un
+   spinner cuando el contenido final ocupa un layout conocido
+   (tarjetas, filas de tabla), para que no haya "salto" al llegar los
+   datos reales (Fase 9). */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-text) 8%, transparent), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after { animation: none; }
+}
+
+/* Barra de texto placeholder (filas de tabla skeleton) — .skeleton
+   por sí sola no tiene tamaño propio, lo toma del contenido real que
+   reemplaza; una celda de <tbody> vacía necesita uno explícito. */
+.skeleton-text {
+  display: inline-block;
+  width: 80%;
+  max-width: 140px;
+  height: 14px;
+}
+
+/* Ripple: círculo que se expande desde el punto de clic — se agrega
+   dinámicamente vía JS (ver js/ripple.js, Fase 9) como <span
+   class="ripple"> posicionado con --ripple-x/--ripple-y. */
+.ripple {
+  position: absolute;
+  left: var(--ripple-x, 50%);
+  top: var(--ripple-y, 50%);
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+  pointer-events: none;
+  animation: rippleExpand 550ms var(--ease) forwards;
+}

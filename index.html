@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinanzasPro</title>
+  <meta name="description" content="Plataforma inteligente de administración financiera personal.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://esm.sh" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <noscript>Activa JavaScript para usar FinanzasPro.</noscript>
+
+  <!-- Botón de tema flotante: solo visible en el layout "auth" (login/register).
+       En el layout "app", el toggle vive dentro de la topbar (ver layout.js). -->
+  <button type="button" class="theme-toggle" data-theme-toggle aria-label="Cambiar tema" id="global-theme-toggle" hidden>
+    <span class="theme-toggle-icon" aria-hidden="true"></span>
+  </button>
+
+  <!-- Layout "auth": login / register. El router inyecta la vista completa aquí. -->
+  <main id="auth-root" class="auth-body" hidden></main>
+
+  <!-- Layout "app": dashboard, ingresos, gastos, etc. Sidebar y topbar los
+       renderiza layout.js una sola vez por sesión; #view-root cambia en
+       cada navegación. -->
+  <div id="app-shell" class="app-shell" hidden>
+    <aside id="app-sidebar" class="app-sidebar" aria-label="Menú principal"></aside>
+    <div id="sidebar-backdrop" class="sidebar-backdrop" hidden></div>
+    <div class="app-main">
+      <header id="app-topbar" class="app-topbar"></header>
+      <main id="view-root" class="app-content"></main>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
